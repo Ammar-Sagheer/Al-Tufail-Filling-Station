@@ -3893,7 +3893,7 @@ rules a translated page keeps, found while building the frame:
 ## Sending a document, and an intro clip (October 2026)
 
 - **A document a customer receives is sent from where it is previewed.** The
-  statement dialog's foot is Download PDF (primary), then Send amount by SMS and
+  statement dialog's foot is Download PDF (primary), then Send by SMS and
   Close. `app/_lib/share-pdf.js` holds the phone-number and SMS/WhatsApp message
   links. Sending the PDF as a file by WhatsApp was tried and removed (see the
   changelog), so do not rebuild it on the share sheet.

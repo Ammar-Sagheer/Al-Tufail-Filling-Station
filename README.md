@@ -189,7 +189,7 @@ cannot disagree. Its number is the period and the customer (`INV-202609-7F3A`),
 the same however many times it is downloaded; no counter, no table. The pump's
 logo is drawn at 64pt on it.
 
-**Sending it.** **Download PDF** saves the file; **Send amount by SMS** opens the
+**Sending it.** **Download PDF** saves the file; **Send by SMS** opens the
 messages app on the customer's number with a short message (who it is from, what
 it is, the amount). Sending the PDF itself by WhatsApp was built and taken out at
 the owner's request: a web page cannot attach a file to WhatsApp, and on his

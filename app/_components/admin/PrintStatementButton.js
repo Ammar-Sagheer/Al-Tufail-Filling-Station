@@ -317,7 +317,7 @@ export default function PrintStatementButton({
               alone, with the figure in it. Sending the file by WhatsApp from here
               was tried (the phone's share sheet, then download and attach) and
               taken out at the owner's request: see the changelog. */}
-          <div className="sticky bottom-0 space-y-2 border-t border-ink-200 bg-white pt-3">
+          <div className="sticky bottom-0 -mx-5 -mb-5 flex flex-col gap-3 border-t border-ink-200 bg-white px-5 pb-5 pt-4">
             <Button
               component="a"
               href={href}
@@ -327,11 +327,11 @@ export default function PrintStatementButton({
             >
               Download PDF
             </Button>
-            <div className="grid grid-cols-2 gap-2">
-              <Button component="a" href={smsLink(customerPhone, message)} variant="secondary" sx={{ minHeight: 44 }}>
-                Send amount by SMS
+            <div className="grid grid-cols-2 gap-3">
+              <Button component="a" href={smsLink(customerPhone, message)} variant="secondary" sx={{ minHeight: 48 }}>
+                Send by SMS
               </Button>
-              <Button variant="secondary" type="button" sx={{ minHeight: 44 }} onClick={() => setIsOpen(false)}>
+              <Button variant="secondary" type="button" sx={{ minHeight: 48 }} onClick={() => setIsOpen(false)}>
                 Close
               </Button>
             </div>

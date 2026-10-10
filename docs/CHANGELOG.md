@@ -185,7 +185,7 @@ single read.
   lists them all. The BIN may have been one clone's handling of a shared file:
   to be learned from the owner's next test.
 - **All WhatsApp file sending removed** at the owner's request (Send on WhatsApp,
-  Share to an app). The dialog's foot is now Download PDF, Send amount by SMS and
+  Share to an app). The dialog's foot is now Download PDF, Send by SMS and
   Close. `share-pdf.js` keeps only the number and message links.
 - **The statement and invoice previews are card lists on a phone** (under 48rem):
   the five-column table needed a sideways scroll that hid the fuel badge and
