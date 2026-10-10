@@ -14,6 +14,14 @@
 > - **An intro clip on every load**: `public/intro.mp4` (and `intro.webm`),
 >   named by `INTRO_VIDEO` in `pump-settings.js`, with Skip (`IntroVideo.js`).
 > - The backup panel shows only when the Vercel env var `SHOW_BACKUP=true`.
+> - `supabase/setup/al-tufail-forecourt.sql`: his tanks and nozzles, run once
+>   after the new-database file (Unit 1 petrol, nozzles 1 and 2; Unit 2 diesel,
+>   nozzles 3 and 4; Petrol Tank 15,736 L, Diesel Tank 26,382 L, the brims of
+>   his charts).
+> - `supabase/setup/al-tufail-dip-charts.sql`: his two tank charts (075),
+>   computed from the tanks' dimensions, which every printed line matches but
+>   one: petrol 1,170 mm printed 7,546, true 7,946 (see the file).
+> - Download backup is shown (`SHOW_BACKUP=true` on Vercel), at his request.
 >
 > Cut from the master at `eede62b` on 10 Oct 2026 by `scripts/new-client.mjs`
 > (repo `Ammar-Sagheer/Al-Tufail-Filling-Station`). Add each new difference to this list as it is made, and to
