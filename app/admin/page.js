@@ -1,6 +1,7 @@
 import { requirePageRole, ROLES, todayISO, shiftISODate } from '@/app/_lib/helpers';
 import {
   getDailySummary,
+  getDayCollection,
   getSalesTrend,
   getLubricantTrend,
   getMonthEndStock,
@@ -89,7 +90,7 @@ export default async function DashboardPage({ searchParams }) {
   const closedYear = month === 1 ? year - 1 : year;
   const closedMonth = month === 1 ? 12 : month - 1;
 
-  const [summary, trend, lubricantTrend, monthEndStock, bankAccounts, expenseCategories, staff, attendance, dipCharts] = await Promise.all([
+  const [summary, trend, lubricantTrend, monthEndStock, bankAccounts, expenseCategories, staff, attendance, dipCharts, collection] = await Promise.all([
     getDailySummary(date),
     getSalesTrend(trendFrom, date),
     getLubricantTrend(trendFrom, date),
@@ -102,6 +103,8 @@ export default async function DashboardPage({ searchParams }) {
     getAttendanceForDay(date).catch(() => ({})),
     // For the dip checker in Quick entry; {} on failure hides the button.
     getDipChartRanges(),
+    // What the staff still owe for the day (082). A missing migration must not take the page down.
+    getDayCollection(date).catch(() => null),
   ]);
 
   return (
@@ -119,6 +122,7 @@ export default async function DashboardPage({ searchParams }) {
       attendance={attendance}
       liveTanks={tanks.filter((tank) => tank.is_active !== false)}
       dipCharts={dipCharts}
+      collection={collection}
       lang={lang}
     />
   );

@@ -1,5 +1,5 @@
 import { requirePageRole, ROLES, todayISO, monthRange } from '@/app/_lib/helpers';
-import { getExpenses, getExpenseCategories } from '@/app/_lib/data-service';
+import { getExpenses, getExpenseCategories, getBankAccounts } from '@/app/_lib/data-service';
 import ExpensesView from '@/app/_components/admin/expenses/ExpensesView';
 
 import { getI18n } from '@/app/_lib/i18n/server';
@@ -36,9 +36,11 @@ export default async function ExpensesPage({ searchParams }) {
   // The month on screen, not a rolling window: the table and the totals beside
   // it then describe the same rows, so the category list can be checked by
   // reading down the table rather than taken on trust.
-  const [expenses, usedCategories] = await Promise.all([
+  const [expenses, usedCategories, bankAccounts] = await Promise.all([
     getExpenses({ from, to, limit: 200 }),
     getExpenseCategories(),
+    // For Deposit to bank (805). A failure only hides the choices.
+    getBankAccounts().catch(() => []),
   ]);
 
   return (
@@ -47,7 +49,8 @@ export default async function ExpensesPage({ searchParams }) {
       year={year}
       month={month}
       expenses={expenses}
-            usedCategories={usedCategories}
+      usedCategories={usedCategories}
+      bankAccounts={bankAccounts}
       lang={profile.language}
     />
   );

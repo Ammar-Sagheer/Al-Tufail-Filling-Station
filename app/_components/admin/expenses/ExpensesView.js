@@ -4,6 +4,7 @@ import Icon from '@/app/_components/ui/Icon';
 import PendingLink from '@/app/_components/ui/PendingLink';
 import CategoryBreakdown from '@/app/_components/admin/CategoryBreakdown';
 import ExpenseForm from '@/app/_components/admin/ExpenseForm';
+import DepositToBankForm from '@/app/_components/admin/DepositToBankForm';
 import DeleteExpenseButton from '@/app/_components/admin/DeleteExpenseButton';
 import TitleHeader from '@/app/_components/admin/dashboard/TitleHeader';
 import SectionHeader from '@/app/_components/admin/dashboard/SectionHeader';
@@ -11,7 +12,7 @@ import KpiCard, { KpiGrid } from '@/app/_components/admin/dashboard/KpiCard';
 
 import { sumMoney } from '@/app/_lib/format-helpers';
 import { i18nFor, rich } from '@/app/_lib/i18n/core';
-import { Translated } from '@/app/_components/i18n/I18nProvider';
+import { Translated, InEnglish } from '@/app/_components/i18n/I18nProvider';
 
 /**
  * What the pump spends, drawn - in the new look (docs/UI_CONVENTIONS.md -> "The
@@ -20,7 +21,7 @@ import { Translated } from '@/app/_components/i18n/I18nProvider';
  * Its own section rather than a block at the bottom of Reports: Reports is read
  * once a month, and an expense is written down the day it is paid.
  */
-export default function ExpensesView({ monthParam, year, month, expenses, usedCategories, lang = 'en' }) {
+export default function ExpensesView({ monthParam, year, month, expenses, usedCategories, bankAccounts = [], lang = 'en' }) {
   // The login's language (079): words from the dictionaries, figures from fmt.
   const { t, fmt } = i18nFor(lang);
   const monthName = fmt.month(year, month);
@@ -84,6 +85,11 @@ export default function ExpensesView({ monthParam, year, month, expenses, usedCa
             out/Recovered switch inside it - see ExpenseForm. */}
         <ExpenseForm used={usedCategories} kind="paid" />
         <ExpenseForm used={usedCategories} kind="recovered" />
+        {/* Cash taken out of the safe to the bank, from here too (Al Hakeem):
+            one entry, in Treasury and in the account (805). */}
+        <InEnglish>
+          <DepositToBankForm accounts={bankAccounts} idPrefix="expenses_deposit" />
+        </InEnglish>
       </TitleHeader>
 
       {/* THREE CARDS. A "biggest category" card was tried and dropped: a

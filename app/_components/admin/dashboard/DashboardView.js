@@ -1,5 +1,6 @@
 import Icon from '@/app/_components/ui/Icon';
 import QuickEntry from '@/app/_components/admin/dashboard/QuickEntry';
+import CollectionPanel from '@/app/_components/admin/dashboard/CollectionPanel';
 import OnDuty from '@/app/_components/admin/dashboard/OnDuty';
 import DayHeader from '@/app/_components/admin/dashboard/DayHeader';
 import KpiCard from '@/app/_components/admin/dashboard/KpiCard';
@@ -19,7 +20,7 @@ import {
 import { shiftISODate } from '@/app/_lib/date-helpers';
 import { sumMoney } from '@/app/_lib/format-helpers';
 import { i18nFor, rich } from '@/app/_lib/i18n/core';
-import { Translated } from '@/app/_components/i18n/I18nProvider';
+import { Translated, InEnglish } from '@/app/_components/i18n/I18nProvider';
 import { FUEL_ORDER, byFuelOrder } from '@/app/_lib/fuel-colors';
 
 /**
@@ -58,6 +59,7 @@ export default function DashboardView({
   attendance = {},
   liveTanks = [],
   dipCharts = {},
+  collection = null,
   lang = 'en',
 }) {
   // The login's language (079), from the page. Every word below comes from
@@ -193,6 +195,11 @@ export default function DashboardView({
         tanks={liveTanks}
         dipCharts={dipCharts}
       />
+
+      {/* Not in the dictionaries yet: reads in English, left to right. */}
+      <InEnglish>
+        <CollectionPanel collection={collection} date={date} />
+      </InEnglish>
 
       {/* ================= the takings ================= */}
       <section aria-labelledby="takings-heading" className="@container mt-5">

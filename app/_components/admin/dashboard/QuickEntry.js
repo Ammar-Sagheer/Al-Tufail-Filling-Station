@@ -8,6 +8,7 @@ import Icon from '@/app/_components/ui/Icon';
 import PendingLink from '@/app/_components/ui/PendingLink';
 import ExpenseForm from '@/app/_components/admin/ExpenseForm';
 import BankTransactionForm from '@/app/_components/admin/BankTransactionForm';
+import DepositToBankForm from '@/app/_components/admin/DepositToBankForm';
 import DipChecker from '@/app/_components/admin/DipChecker';
 import { InEnglish, useI18n } from '@/app/_components/i18n/I18nProvider';
 
@@ -17,17 +18,32 @@ import { InEnglish, useI18n } from '@/app/_components/i18n/I18nProvider';
  * same forms as on Expenses and Banking, in dialogs, so the rules, the
  * wording and what the database refuses are the same in both places. The
  * links beside them are for when he wants the list, not just the entry.
+ *
+ * ALSO ON THE READINGS PAGE (Al Hakeem asked): while the day is entered, the
+ * day's expense and bank entry are added too, so it is the same bar with `date`
+ * set to the day on screen (which can be yesterday, after midnight) and a
+ * heading of its own. Deposit to bank (081) moves cash from the safe into an
+ * account as one entry; its dialog is not translated yet and reads in English.
  */
-export default function QuickEntry({ accounts = [], usedCategories = [], tanks = [], dipCharts = {} }) {
+export default function QuickEntry({
+  accounts = [],
+  usedCategories = [],
+  tanks = [],
+  dipCharts = {},
+  date,
+  heading,
+  idPrefix = 'quick',
+}) {
   const [bankOpen, setBankOpen] = useState(false);
   const [dipOpen, setDipOpen] = useState(false);
   const hasCharts = tanks.some((tank) => dipCharts[tank.id]);
   const { t } = useI18n();
+  const title = heading ?? t('quick.label');
 
   return (
-    <section aria-label={t('quick.label')} data-card className="panel @container mt-4 px-5 py-4">
+    <section aria-label={title} data-card className="panel @container mt-4 px-5 py-4">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-        <p className="text-base font-semibold text-ink-800">{t('quick.label')}</p>
+        <p className="text-base font-semibold text-ink-800">{title}</p>
 
         {/* Full width, one above the other, on a phone (side by side they wrapped
             "Add expense" onto two lines); half each from 26rem; their own widths beside the
@@ -37,7 +53,7 @@ export default function QuickEntry({ accounts = [], usedCategories = [], tanks =
                     {/* The expense form follows the page (079). The bank form below is
               not translated yet and reads in English, left to right. */}
           <div>
-            <ExpenseForm used={usedCategories} />
+            <ExpenseForm used={usedCategories} defaultDate={date} />
           </div>
 
           {/* Dip to litres at any time, saving nothing (Al Tufail, October 2026). */}
@@ -63,6 +79,12 @@ export default function QuickEntry({ accounts = [], usedCategories = [], tanks =
               {t('quick.addBank')}
             </Button>
           )}
+
+          {accounts.length > 0 ? (
+            <InEnglish>
+              <DepositToBankForm accounts={accounts} defaultDate={date} idPrefix={`${idPrefix}_deposit`} />
+            </InEnglish>
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-semibold @[40rem]:ms-auto">
@@ -96,7 +118,7 @@ export default function QuickEntry({ accounts = [], usedCategories = [], tanks =
           subtitle={<span className="text-sm text-ink-600">{t('quick.bankSubtitle')}</span>}
         >
           <InEnglish>
-            <BankTransactionForm accounts={accounts} bare onSaved={() => setBankOpen(false)} />
+            <BankTransactionForm accounts={accounts} bare onSaved={() => setBankOpen(false)} defaultDate={date} />
           </InEnglish>
         </Dialog>
       ) : null}

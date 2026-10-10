@@ -19,7 +19,7 @@ theme order; the last block of work is at the bottom.
 
 **The shape of it.** Next.js App Router (plain JavaScript) on Vercel in
 `sin1`, Supabase Postgres in `ap-southeast-1`. One owner, a couple of staff
-logins, one pump. Migrations run to **079**, and every page wears the new look
+logins, one pump. Migrations run to **083**, and every page wears the new look
 (September 2026).
 
 **What was added most recently**, newest last, all of it detailed further down:
@@ -156,6 +156,24 @@ single read.
    before the column existed hands it null, and NOT NULL would refuse the whole
    file. Every column added since (056, 063, 065, 067) is nullable for this reason,
    and nothing fails until the day an old backup is needed.
+
+
+## Staff advances, deposit to bank and the collection panel (11 Oct 2026)
+
+Carried from the master (080 to 083), which took them from Al Hakeem's repo
+(his 804 to 807). **Run 080, 081, 082 and 083 on his Supabase before this
+deploys**: the Staff page reads a new shape from `get_salary_month`, and the
+Dashboard panel reads `get_day_collection`.
+
+- **Staff** (the Salaries page): a payment is an advance (month stays open) or
+  the settling payment; each person shows Earned, Paid, Pending.
+- **Deposit to bank**: one entry takes cash from the safe into a bank account.
+  On Treasury, Expenses, Readings and Quick entry.
+- **Readings**: the day's entries bar (owner only).
+- **Dashboard: To collect from the staff**: total sales less credit less
+  expenses less what reached the safe that day.
+- English only here (`OFFER_URDU = false`), so no dictionary keys were added;
+  the nav label still reads "Salaries".
 
 ## Foundation
 

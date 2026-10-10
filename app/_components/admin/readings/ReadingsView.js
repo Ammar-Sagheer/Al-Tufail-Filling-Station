@@ -3,6 +3,7 @@ import ReadingForm from '@/app/_components/admin/ReadingForm';
 import ClearDayButton from '@/app/_components/admin/ClearDayButton';
 import ReadingsCashUpBar from '@/app/_components/admin/ReadingsCashUpBar';
 import DayHeader from '@/app/_components/admin/dashboard/DayHeader';
+import QuickEntry from '@/app/_components/admin/dashboard/QuickEntry';
 import KpiCard from '@/app/_components/admin/dashboard/KpiCard';
 import Notice from '@/app/_components/admin/dashboard/Notice';
 
@@ -32,6 +33,8 @@ export default function ReadingsView({
   creditSalesByReading,
   ratesInForce = {},
   isOwner,
+  bankAccounts = [],
+  expenseCategories = [],
   lang = 'en',
 }) {
   // The login's language (079): words from the dictionaries, figures from fmt.
@@ -145,6 +148,19 @@ export default function ReadingsView({
           <ClearDayButton date={date} dateLabel={fmt.date(date)} entryCount={done.length} />
         ) : null}
       </DayHeader>
+
+      {/* The day's expense, bank entry and cash to the bank, entered with the
+          readings (Al Hakeem). Owner only: expenses and banking are his. The
+          entries default to the day on screen. */}
+      {isOwner ? (
+        <QuickEntry
+          heading="The day's entries"
+          idPrefix="readings"
+          date={date}
+          accounts={bankAccounts}
+          usedCategories={expenseCategories}
+        />
+      ) : null}
 
       {dayGap || missingRate || carriedOver.length > 0 ? (
         <div className="mt-4 space-y-3">

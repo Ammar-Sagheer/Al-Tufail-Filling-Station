@@ -7,7 +7,7 @@ import {
 } from '@/app/_lib/data-service';
 import SalariesView from '@/app/_components/admin/salaries/SalariesView';
 
-export const metadata = { title: 'Salaries' };
+export const metadata = { title: 'Staff' };
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const ISO_MONTH = /^\d{4}-\d{2}$/;
@@ -61,7 +61,7 @@ export default async function SalariesPage({ searchParams }) {
   ]);
 
   const unpaidLastMonth = (lastMonth ?? []).filter(
-    (row) => !row.payment && Number(row.earned) > 0,
+    (row) => !row.settled && Number(row.pending) > 0,
   ).length;
 
   return (
