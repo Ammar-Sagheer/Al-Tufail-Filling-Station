@@ -1,17 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 /**
- * The pump's own intro clip, over the app on every full load: opening it, or a
- * refresh (Al Tufail, October 2026). Set by INTRO_VIDEO in pump-settings.js;
- * nothing renders without it.
+ * The pump's own intro clip, over the app ONCE after each sign-in (Al Tufail,
+ * October 2026). Set by INTRO_VIDEO in pump-settings.js. It first played on
+ * every full load, and a full load is also what a plain GET form does: the
+ * Reports month's Show button replayed it every time. So signIn() sets an
+ * `intro` cookie, the root layout renders this only while it is there, and
+ * this clears it the moment it mounts - a refresh, a form or another page
+ * never sees it again until the next sign-in.
  *
- * IN THE ROOT LAYOUT, so it is drawn by the server in the first response and
- * covers the page from the first paint, rather than the app flashing up and
- * then being covered. A layout is not remounted when a link is followed, so it
- * plays on a load or a refresh and never between pages, which is what was
- * asked for.
+ * IN THE ROOT LAYOUT, so it covers the landing page from its first paint
+ * rather than the app flashing up and then being covered.
  *
  * IT CAN ALWAYS BE GOT PAST. Skip is there from the first frame, it ends itself
  * when the clip ends, and it lets go if the file fails to load or never starts
@@ -21,13 +23,26 @@ import { useEffect, useRef, useState } from 'react';
  * MUTED TO START, because a browser refuses to autoplay a video with sound;
  * the sound button turns it on with the tap the browser wants first.
  */
-export default function IntroVideo({ src }) {
+export default function IntroVideo({ src, initial = false }) {
   // One path, or several (a WebM first, then the MP4): the browser plays the
   // first it can, and fetches only that one.
   const sources = Array.isArray(src) ? src : [src];
-  const [shown, setShown] = useState(true);
+  const [shown, setShown] = useState(initial);
+  const pathname = usePathname();
   const [muted, setMuted] = useState(true);
   const video = useRef(null);
+
+  /*
+   * Looked for on every change of page, before it paints: signing in moves to
+   * the landing page without a full load, so the layout drawn on the server
+   * may never see the cookie. Found, it is used up at once (see the header).
+   */
+  useLayoutEffect(() => {
+    if (document.cookie.split('; ').includes('intro=1')) {
+      document.cookie = 'intro=; Max-Age=0; path=/; SameSite=Lax';
+      setShown(true);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (!shown) return undefined;

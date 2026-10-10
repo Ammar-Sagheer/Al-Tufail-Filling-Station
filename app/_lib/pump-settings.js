@@ -22,9 +22,10 @@ export const DIP_DEFAULT = 'morning';
 export const OFFER_URDU = false;
 
 /**
- * INTRO_VIDEO - a clip the pump's owner supplied, played over the app on every
- * full load (opening it, or a refresh), with Skip, starting muted because a
- * browser will not autoplay sound (Al Tufail, October 2026). A path under
+ * INTRO_VIDEO - a clip the pump's owner supplied, played over the app once
+ * after each sign-in (never on a refresh or between pages), with Skip,
+ * starting muted because a browser will not autoplay sound (Al Tufail,
+ * October 2026). A path under
  * public/ (or a list, WebM first then MP4, and the browser plays the first it
  * can), or null for none. See IntroVideo.js.
  */

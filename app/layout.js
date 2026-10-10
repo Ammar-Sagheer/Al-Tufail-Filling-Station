@@ -35,7 +35,11 @@ export const viewport = {
  * screen width decides, which is what it did before anybody had a preference.
  */
 export default async function RootLayout({ children }) {
-  const nav = (await cookies()).get('nav')?.value;
+  const jar = await cookies();
+  const nav = jar.get('nav')?.value;
+  // The intro clip plays only on the first page after a sign-in, while the
+  // cookie signIn() sets is still there (IntroVideo clears it).
+  const playIntro = Boolean(INTRO_VIDEO) && jar.get('intro')?.value === '1';
   // The signed-in login's language (079), on <html> from the first byte, so
   // the sidebar is already on the right for an Urdu reader. Signed out, English.
   const lang = normalizeLanguage((await getSessionProfile())?.language);
@@ -58,8 +62,8 @@ export default async function RootLayout({ children }) {
         <AppRouterCacheProvider options={{ key: 'mui' }}>
           <AppTheme>{children}</AppTheme>
         </AppRouterCacheProvider>
-        {/* The pump's own intro clip, if it has one (pump-settings.js). */}
-        {INTRO_VIDEO ? <IntroVideo src={INTRO_VIDEO} /> : null}
+        {/* The pump's own intro clip, once after each sign-in (pump-settings.js). */}
+        {INTRO_VIDEO ? <IntroVideo src={INTRO_VIDEO} initial={playIntro} /> : null}
       </body>
     </html>
   );

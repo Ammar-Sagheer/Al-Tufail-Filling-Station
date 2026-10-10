@@ -11,7 +11,7 @@
 > - `vercel.json` runs in `bom1`.
 > - **English only**: `OFFER_URDU = false` in `pump-settings.js`, so there is no
 >   language switch and every login reads English.
-> - **An intro clip on every load**: `public/intro.mp4` (and `intro.webm`),
+> - **An intro clip once after each sign-in**: `public/intro.mp4` (and `intro.webm`),
 >   named by `INTRO_VIDEO` in `pump-settings.js`, with Skip (`IntroVideo.js`).
 > - The backup panel shows only when the Vercel env var `SHOW_BACKUP=true`.
 > - `supabase/setup/al-tufail-forecourt.sql`: his tanks and nozzles, run once

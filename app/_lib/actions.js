@@ -16,6 +16,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 import { createClient } from './supabase-server';
 import { createAdminClient, createPasswordCheckClient } from './supabase-auth';
@@ -40,6 +41,7 @@ import { i18nFor } from './i18n/core';
 import { getI18n } from './i18n/server';
 import { inLanguage } from './i18n/refusals';
 import { ASSET_CATEGORIES } from './asset-categories';
+import { INTRO_VIDEO } from './pump-settings';
 import { TREASURY_IN_CATEGORIES, TREASURY_OUT_CATEGORIES } from './treasury-categories';
 
 // ---------------------------------------------------------------------------
@@ -175,6 +177,14 @@ export async function signIn(_prevState, formData) {
     }
 
     destination = landingPageFor(profile.role);
+  }
+
+  // The pump's intro clip (pump-settings.js) plays once, on the page this
+  // sign-in lands on, and never again until the next sign-in: this cookie is
+  // the ticket, and IntroVideo tears it up as it starts. Five minutes is only
+  // a backstop in case the landing page never loads.
+  if (INTRO_VIDEO) {
+    (await cookies()).set('intro', '1', { path: '/', maxAge: 300, sameSite: 'lax' });
   }
 
   // redirect() throws internally, so it has to sit outside any try/catch.

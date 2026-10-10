@@ -3903,7 +3903,7 @@ rules a translated page keeps, found while building the frame:
   WhatsApp's preview line, so nothing longer.
 - **An overlay over the whole app must always be escapable**: `IntroVideo` has
   Skip from the first frame, ends itself, and lets go on an error or a timeout.
-  Rendered from the root layout so it is in the first paint and not replayed on
-  client navigation.
+  It plays once per sign-in (an `intro` cookie set by `signIn()`, used up on
+  sight), never on a full load as such: a plain GET form is a full load too.
 - **A tool that saves nothing says so in its last line** ("This only checks..."),
   so a dip checked is never mistaken for a dip recorded (`DipChecker`).

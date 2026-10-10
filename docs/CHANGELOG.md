@@ -8634,6 +8634,18 @@ Checked: the invoice PDF and the statement for the same period agree (Rs
 and the dip checker at 1366 and 400 px; the clip plays, ends, skips and replays
 on reload. Build passes; the dictionaries agree at 615 keys.
 
+### The intro clip plays once, after signing in (10 Oct 2026)
+
+It played on every full load, and the owner found the other half of that the
+first day: the Reports month's **Show** is a plain GET form, so every Show
+replayed it. He wants it after signing in and never again. So `signIn()` sets a
+short-lived `intro` cookie, and `IntroVideo` (always in the root layout when the
+pump has a clip) shows itself only when it finds that cookie, and clears it the
+moment it does. It looks on every change of page, before the page paints,
+because signing in reaches the Dashboard without a full load and the layout
+drawn on the server may never see the cookie. A refresh, a form, another page:
+no cookie, no clip, until the next sign-in.
+
 # Syncing the offline (Electron) build: reference `3d696ea` -> the end of migration 079
 
 **Read this first: the commit hashes below are in the OLD master.** This
@@ -8787,7 +8799,7 @@ desktop build changed the old file:
 | **Expenses in Urdu** (079, stage 6) | `expenses/ExpensesView.js`, `ExpenseForm.js`, `DeleteExpenseButton.js`, `CategoryBreakdown.js` (`lang`, also used by Treasury), `dashboard/QuickEntry.js` (the expense form out of `InEnglish`), the Expenses page; the dictionaries | `createExpense`, `deleteExpense` answer through `speaker()` |
 | **Invoice and sharing** (Al Tufail) | `PrintStatementButton.js` (Statement / Invoice switch, Share PDF, WhatsApp, SMS; `customerPhone`), `InvoicePreview.js` (new), `customer-statement.js` (`invoiceFromStatement`, `invoiceNumber`), `statement-pdf.js` (`buildInvoicePdf`, `invoiceFilename`, the letterhead's logo height and no-logo spacing), `app/_lib/share-pdf.js` (new), `CustomerView.js`, the statement route (`?kind=invoice`) | none |
 | **On duty, dip checker** (Al Tufail) | `dashboard/OnDuty.js` (new), `DipChecker.js` (new), `dashboard/QuickEntry.js` (Check a dip), `DashboardView.js`, `stock/StockView.js`, `app/admin/page.js`; the dictionaries (`duty`, `dipCheck`) | `getStaffMembers`, `getAttendanceForDay` and `getDipChartRanges` on the Dashboard |
-| **Per-pump language and intro** | `pump-settings.js` (`OFFER_URDU`, `INTRO_VIDEO`), `helpers.js` (`getSessionProfile`), `LanguageSwitch.js`, `LanguagePanel.js`, `ui/IntroVideo.js` (new), `app/layout.js` | none |
+| **Per-pump language and intro** | `pump-settings.js` (`OFFER_URDU`, `INTRO_VIDEO`), `helpers.js` (`getSessionProfile`), `LanguageSwitch.js`, `LanguagePanel.js`, `ui/IntroVideo.js` (new), `app/layout.js` | `signIn()` sets the `intro` cookie: the clip plays once per sign-in |
 
 **Online-only, do not port:**
 

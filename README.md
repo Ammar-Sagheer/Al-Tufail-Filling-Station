@@ -11,7 +11,7 @@
 > - `vercel.json` runs in `bom1`.
 > - **English only**: `OFFER_URDU = false` in `pump-settings.js`, so there is no
 >   language switch and every login reads English.
-> - **An intro clip on every load**: `public/intro.mp4` (and `intro.webm`),
+> - **An intro clip once after each sign-in**: `public/intro.mp4` (and `intro.webm`),
 >   named by `INTRO_VIDEO` in `pump-settings.js`, with Skip (`IntroVideo.js`).
 > - The backup panel shows only when the Vercel env var `SHOW_BACKUP=true`.
 >
@@ -1104,8 +1104,9 @@ it changes nothing for anyone else.
   day's dip is still the tank's own form. Only tanks with a chart are offered.
 - **Per-pump settings** live in `app/_lib/pump-settings.js`: `DIP_DEFAULT`,
   `OFFER_URDU` (false takes the language switch away and every login reads
-  English) and `INTRO_VIDEO` (a clip under `public/` played over the app on
-  every load or refresh, muted, with Skip; null for none). `scripts/new-client.mjs`
+  English) and `INTRO_VIDEO` (a clip under `public/` played over the app once
+  after each sign-in, never on a refresh or a form, muted, with Skip; null for
+  none). `scripts/new-client.mjs`
   sets them with `--dip`, `--urdu no` and `--intro`.
 
 - **Replacing a damaged unit.** **Settings → Dispensing units → Replace this
