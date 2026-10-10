@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import Dialog from '@/app/_components/ui/Dialog';
 import Button from '@/app/_components/ui/Button';
@@ -16,7 +16,7 @@ import {
 import { formatPKR } from '@/app/_lib/format-helpers';
 import { formatDate } from '@/app/_lib/date-helpers';
 import { BUSINESS_NAME } from '@/app/_lib/brand';
-import { canShareFiles, fetchPdf, saveFile, sharePdf, smsLink, whatsappLink } from '@/app/_lib/share-pdf';
+import { smsLink } from '@/app/_lib/share-pdf';
 
 /**
  * "Print statement" - the page you take when you go to collect.
@@ -71,10 +71,6 @@ export default function PrintStatementButton({
   // Statement (the khata) or invoice (one period's bill) - Al Tufail, October
   // 2026. The same period, the same balances, two ways of drawing them.
   const [kind, setKind] = useState('statement');
-  const [sharing, setSharing] = useState(null);
-  // Known only in the browser; false until then and on a laptop.
-  const [canShare, setCanShare] = useState(false);
-  useEffect(() => setCanShare(canShareFiles()), []);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
 
@@ -134,7 +130,6 @@ export default function PrintStatementButton({
   // month, the usual one. The boxes stay editable.
   function chooseKind(next) {
     setKind(next);
-    setSharing(null);
     if (next === 'invoice' && !from && !to) {
       const lastMonth = presets.find((preset) => preset.key === 'last-month');
       if (lastMonth) choose(lastMonth);
@@ -168,51 +163,6 @@ export default function PrintStatementButton({
             : `${statement.isCurrent ? 'Amount due' : `Due as at ${formatDate(statement.asAt)}`}: ${formatPKR(owed)}.`,
       ].join('\n')
     : '';
-  const filename = `${kind === 'invoice' ? 'Invoice' : 'Statement'}-${customerName.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'customer'}-${kind === 'invoice' ? number : asOf}.pdf`;
-
-  /*
-   * SEND ON WHATSAPP: download the PDF, then open WhatsApp on the customer's
-   * number with the message typed in, and the owner attaches the file there
-   * (paperclip, Document). The phone's share sheet was tried first and given up:
-   * on the pump's Android phone Chrome handed WhatsApp the PDF as an unnamed
-   * BIN file that would not open, whatever the file was called, with or without
-   * text beside it. See share-pdf.js.
-   *
-   * WhatsApp is opened by navigating to the link rather than window.open: this
-   * runs after the PDF has been fetched, no longer inside the tap, and a browser
-   * blocks a pop-up opened from there but not a navigation.
-   */
-  async function share() {
-    setSharing({ busy: true });
-    try {
-      const file = await fetchPdf(href, filename);
-      saveFile(file);
-      setSharing({
-        done: 'The PDF is saved on this phone. In WhatsApp tap the paperclip, choose Document, and pick it.',
-      });
-      setTimeout(() => {
-        window.location.href = whatsappLink(customerPhone, message);
-      }, 900);
-    } catch (error) {
-      setSharing({ error: error.message });
-    }
-  }
-
-  /*
-   * SHARE TO AN APP: the phone's share sheet, which lists every app that takes
-   * a file. It exists because wa.me opens whichever WhatsApp the phone has as
-   * its default, and a phone with a clone or WhatsApp Business gives no choice.
-   */
-  async function shareToApp() {
-    setSharing({ busy: true });
-    try {
-      const file = await fetchPdf(href, filename);
-      await sharePdf(file);
-      setSharing(null);
-    } catch (error) {
-      setSharing({ error: error.message });
-    }
-  }
 
   function changeFrom(next) {
     setFrom(next);
@@ -363,67 +313,28 @@ export default function PrintStatementButton({
             </p>
           )}
 
-          {sharing?.error ? (
-            <p role="status" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-800">
-              {sharing.error}
-            </p>
-          ) : sharing?.done ? (
-            <p role="status" className="rounded-lg border border-brand-200 bg-brand-50 px-3 py-2 text-sm font-medium text-brand-800">
-              {sharing.done}
-            </p>
-          ) : null}
-
-          {/* SEND IT, or keep it. The WhatsApp button saves the PDF and opens
-              WhatsApp on the customer's number with the message typed in; the
-              owner attaches the file there. A web page cannot attach a file to
-              WhatsApp by itself (only the WhatsApp Business API can). SMS sends
-              the message alone, with the figure in it.
-
-              TWO ROWS, compact: the first build stacked four rows and a note
-              and filled a third of a phone's screen before the invoice. The
-              one big button is the thing most often wanted; the rest share a
-              row of equal thirds. */}
+          {/* GET IT, or send the amount. Download is the PDF; SMS sends the message
+              alone, with the figure in it. Sending the file by WhatsApp from here
+              was tried (the phone's share sheet, then download and attach) and
+              taken out at the owner's request: see the changelog. */}
           <div className="sticky bottom-0 space-y-2 border-t border-ink-200 bg-white pt-3">
             <Button
+              component="a"
+              href={href}
               variant="primary"
-              type="button"
               sx={{ width: '100%', minHeight: 48 }}
-              onClick={share}
-              disabled={!statement || sharing?.busy}
+              onClick={() => setIsOpen(false)}
             >
-              {sharing?.busy ? 'Preparing the PDF…' : 'Send on WhatsApp'}
+              Download PDF
             </Button>
-            <div className={`grid gap-2 ${canShare ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-3'}`}>
-              {canShare ? (
-                <Button
-                  variant="secondary"
-                  type="button"
-                  sx={{ minHeight: 44 }}
-                  onClick={shareToApp}
-                  disabled={!statement || sharing?.busy}
-                >
-                  Share to an app
-                </Button>
-              ) : null}
-              <Button
-                component="a"
-                href={href}
-                variant="secondary"
-                sx={{ minHeight: 44 }}
-                onClick={() => setIsOpen(false)}
-              >
-                Download
-              </Button>
+            <div className="grid grid-cols-2 gap-2">
               <Button component="a" href={smsLink(customerPhone, message)} variant="secondary" sx={{ minHeight: 44 }}>
-                SMS
+                Send amount by SMS
               </Button>
               <Button variant="secondary" type="button" sx={{ minHeight: 44 }} onClick={() => setIsOpen(false)}>
                 Close
               </Button>
             </div>
-            {!customerPhone ? (
-              <p className="text-xs text-ink-600">No number on file: WhatsApp will ask who to send it to.</p>
-            ) : null}
           </div>
         </div>
       </Dialog>

@@ -184,6 +184,9 @@ single read.
   and a phone with clones or WhatsApp Business gives no choice; the share sheet
   lists them all. The BIN may have been one clone's handling of a shared file:
   to be learned from the owner's next test.
+- **All WhatsApp file sending removed** at the owner's request (Send on WhatsApp,
+  Share to an app). The dialog's foot is now Download PDF, Send amount by SMS and
+  Close. `share-pdf.js` keeps only the number and message links.
 - **The statement and invoice previews are card lists on a phone** (under 48rem):
   the five-column table needed a sideways scroll that hid the fuel badge and
   the money columns. Each entry is a card (date and balance on top, detail

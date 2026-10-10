@@ -3893,11 +3893,10 @@ rules a translated page keeps, found while building the frame:
 ## Sending a document, and an intro clip (October 2026)
 
 - **A document a customer receives is sent from where it is previewed.** The
-  statement dialog's foot is Send on WhatsApp (primary), then Download, SMS and
-  Close. `app/_lib/share-pdf.js` holds the
-  mechanics: fetch the PDF from its download route, download it, and open
-  WhatsApp with the message for the owner to attach the file (Web Share with a
-  file gave WhatsApp an unnamed BIN on Android Chrome, so it is not used). Reuse it for any other PDF meant for someone outside the pump.
+  statement dialog's foot is Download PDF (primary), then Send amount by SMS and
+  Close. `app/_lib/share-pdf.js` holds the phone-number and SMS/WhatsApp message
+  links. Sending the PDF as a file by WhatsApp was tried and removed (see the
+  changelog), so do not rebuild it on the share sheet.
 - **A message that travels with a document is three lines**: the pump's name,
   what the document is and its period, and the figure. It is read in
   WhatsApp's preview line, so nothing longer.
