@@ -193,7 +193,8 @@ logo is drawn at 64pt on it.
 customer's number with the message typed in; the owner attaches the file there
 (paperclip, Document). The phone's share sheet was tried and removed: Chrome on
 Android handed WhatsApp the PDF as an unnamed BIN file that would not open.
-**SMS** sends the message alone: who it is from, what it is, the amount. The number is
+**Share to an app** (phones) opens the share sheet with the PDF, which lists every
+app that takes a file, for a phone with more than one WhatsApp. **SMS** sends the message alone: who it is from, what it is, the amount. The number is
 turned into WhatsApp's form (`0300-1234567` -> `923001234567`) by
 `app/_lib/share-pdf.js`.
 

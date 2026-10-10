@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Dialog from '@/app/_components/ui/Dialog';
 import Button from '@/app/_components/ui/Button';
@@ -16,7 +16,7 @@ import {
 import { formatPKR } from '@/app/_lib/format-helpers';
 import { formatDate } from '@/app/_lib/date-helpers';
 import { BUSINESS_NAME } from '@/app/_lib/brand';
-import { fetchPdf, saveFile, smsLink, whatsappLink } from '@/app/_lib/share-pdf';
+import { canShareFiles, fetchPdf, saveFile, sharePdf, smsLink, whatsappLink } from '@/app/_lib/share-pdf';
 
 /**
  * "Print statement" - the page you take when you go to collect.
@@ -72,6 +72,9 @@ export default function PrintStatementButton({
   // 2026. The same period, the same balances, two ways of drawing them.
   const [kind, setKind] = useState('statement');
   const [sharing, setSharing] = useState(null);
+  // Known only in the browser; false until then and on a laptop.
+  const [canShare, setCanShare] = useState(false);
+  useEffect(() => setCanShare(canShareFiles()), []);
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
 
@@ -190,6 +193,22 @@ export default function PrintStatementButton({
       setTimeout(() => {
         window.location.href = whatsappLink(customerPhone, message);
       }, 900);
+    } catch (error) {
+      setSharing({ error: error.message });
+    }
+  }
+
+  /*
+   * SHARE TO AN APP: the phone's share sheet, which lists every app that takes
+   * a file. It exists because wa.me opens whichever WhatsApp the phone has as
+   * its default, and a phone with a clone or WhatsApp Business gives no choice.
+   */
+  async function shareToApp() {
+    setSharing({ busy: true });
+    try {
+      const file = await fetchPdf(href, filename);
+      await sharePdf(file);
+      setSharing(null);
     } catch (error) {
       setSharing({ error: error.message });
     }
@@ -374,7 +393,18 @@ export default function PrintStatementButton({
             >
               {sharing?.busy ? 'Preparing the PDF…' : 'Send on WhatsApp'}
             </Button>
-            <div className="grid grid-cols-3 gap-2">
+            <div className={`grid gap-2 ${canShare ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-3'}`}>
+              {canShare ? (
+                <Button
+                  variant="secondary"
+                  type="button"
+                  sx={{ minHeight: 44 }}
+                  onClick={shareToApp}
+                  disabled={!statement || sharing?.busy}
+                >
+                  Share to an app
+                </Button>
+              ) : null}
               <Button
                 component="a"
                 href={href}

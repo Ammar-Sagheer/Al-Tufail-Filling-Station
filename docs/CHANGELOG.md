@@ -179,6 +179,11 @@ single read.
   WhatsApp** now downloads the PDF and opens WhatsApp on the customer's number
   with the message typed in, for the owner to attach the file. The owner chose
   this over a private link.
+- **Share to an app** is back as a second button (file alone, shown only where the
+  browser can share files). The wa.me link opens the phone's default WhatsApp,
+  and a phone with clones or WhatsApp Business gives no choice; the share sheet
+  lists them all. The BIN may have been one clone's handling of a shared file:
+  to be learned from the owner's next test.
 - **The statement and invoice previews are card lists on a phone** (under 48rem):
   the five-column table needed a sideways scroll that hid the fuel badge and
   the money columns. Each entry is a card (date and balance on top, detail

@@ -77,3 +77,32 @@ export function saveFile(file) {
   link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 30_000);
 }
+
+/** True where the browser can hand a PDF to another app (phones, tablets). */
+export function canShareFiles() {
+  if (typeof navigator === 'undefined' || !navigator.canShare) return false;
+  try {
+    const probe = new File([new Uint8Array(1)], 'probe.pdf', { type: 'application/pdf' });
+    return navigator.canShare({ files: [probe] });
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Hand the PDF to the phone's share sheet, which lists EVERY app that takes a
+ * file, so a phone with more than one WhatsApp (a clone, WhatsApp Business) lets
+ * the owner pick which. Resolves to 'shared', 'cancelled' or throws. The file
+ * alone, no text: with text beside it WhatsApp dropped the file's name and type.
+ * It is the second button, not the first, because on one phone WhatsApp still
+ * received it as an unnamed BIN file; see the changelog.
+ */
+export async function sharePdf(file) {
+  try {
+    await navigator.share({ files: [file] });
+    return 'shared';
+  } catch (error) {
+    if (error?.name === 'AbortError') return 'cancelled';
+    throw error;
+  }
+}
