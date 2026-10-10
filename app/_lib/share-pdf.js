@@ -56,16 +56,24 @@ export async function fetchPdf(href, filename) {
     const reason = new URL(response.url, window.location.href).searchParams.get('statement_error');
     throw new Error(reason || 'The PDF could not be made. Try Download instead.');
   }
-  const blob = await response.blob();
-  return new File([blob], filename, { type: 'application/pdf' });
+  /*
+   * Rebuilt from the raw bytes rather than wrapping the response's blob: a File
+   * made from the blob can carry the response's own headers' idea of its type
+   * and name into the share, and WhatsApp on Android then shows "Untitled", BIN.
+   * The first bytes are checked for "%PDF" so a page that is not a PDF is never
+   * handed to another app under a .pdf name.
+   */
+  const bytes = new Uint8Array(await response.arrayBuffer());
+  const head = String.fromCharCode(...bytes.slice(0, 4));
+  if (head !== '%PDF') throw new Error('The PDF could not be made. Try Download instead.');
+  return new File([bytes], filename, { type: 'application/pdf', lastModified: Date.now() });
 }
 
-/** True where the browser can hand a PDF to another app (phones, tablets). */
-export function canShareFiles() {
+/** True where the browser can hand THIS file to another app (phones, tablets). */
+export function canShareFiles(file) {
   if (typeof navigator === 'undefined' || !navigator.canShare) return false;
   try {
-    const probe = new File([new Uint8Array(1)], 'probe.pdf', { type: 'application/pdf' });
-    return navigator.canShare({ files: [probe] });
+    return navigator.canShare({ files: [file] });
   } catch {
     return false;
   }

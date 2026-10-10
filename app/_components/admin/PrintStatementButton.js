@@ -184,7 +184,7 @@ export default function PrintStatementButton({
     setSharing({ busy: true });
     try {
       const file = await fetchPdf(href, filename);
-      if (canShareFiles()) {
+      if (canShareFiles(file)) {
         await sharePdf(file);
         setSharing(null);
       } else {

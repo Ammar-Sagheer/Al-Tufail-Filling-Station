@@ -171,7 +171,9 @@ single read.
   was dropped: the PDF button supersedes it.
 - **The share carries the file alone.** With a `title` and `text` beside the file,
   WhatsApp on Android received "Untitled", type BIN, which would not open. Now
-  `navigator.share({ files })` and nothing else.
+  `navigator.share({ files })` and nothing else. Still BIN after that, so the File is now rebuilt from the raw bytes
+  (checked for %PDF) and `canShare` is asked of that very file. If it still
+  arrives as BIN the next step is a signed link instead of a file.
 - **The statement and invoice previews are card lists on a phone** (under 48rem):
   the five-column table needed a sideways scroll that hid the fuel badge and
   the money columns. Each entry is a card (date and balance on top, detail
