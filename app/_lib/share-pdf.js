@@ -2,19 +2,16 @@
  * Sending a statement or an invoice to the customer, from the browser.
  *
  * Asked for by the fourth pump (Al Tufail, October 2026): "easy to share to the
- * credit customer by WhatsApp or message". There is no WhatsApp API to call
- * from a web page that attaches a file, so this uses the two things that do
- * exist:
+ * credit customer by WhatsApp or message". A web page cannot attach a file to
+ * WhatsApp, so this does what can be done: download the PDF, and open WhatsApp
+ * on the customer's number (wa.me) with the message typed in, for the owner to
+ * attach the file by hand. sms: opens the messages app.
  *
- *   1. THE SHARE SHEET (Web Share, with a file). On an Android phone or tablet,
- *      which is what the pump office holds, `navigator.share({ files })` opens
- *      the phone's own share sheet with the PDF attached, and WhatsApp is the
- *      first thing on it. The PDF is fetched from the same download route the
- *      Download button uses, so it is the same document.
- *   2. A LINK WITH THE MESSAGE IN IT, where a file cannot be shared (a laptop
- *      browser): wa.me opens WhatsApp on the customer's number with the text
- *      typed in, and sms: opens the messages app. The PDF is downloaded at the
- *      same time, to be attached by hand.
+ * THE PHONE'S SHARE SHEET (Web Share with a file) WAS TRIED AND REMOVED. On the
+ * pump's Android phone Chrome handed WhatsApp the PDF as an unnamed BIN file
+ * that would not open, with the text, without it, and with the file rebuilt
+ * from its bytes. Download always saved a good PDF, so the file was right and
+ * the hand-over to WhatsApp was not.
  *
  * No server code: this runs in the browser, and every figure in the message
  * was formatted by the caller from Postgres figures.
@@ -69,16 +66,6 @@ export async function fetchPdf(href, filename) {
   return new File([bytes], filename, { type: 'application/pdf', lastModified: Date.now() });
 }
 
-/** True where the browser can hand THIS file to another app (phones, tablets). */
-export function canShareFiles(file) {
-  if (typeof navigator === 'undefined' || !navigator.canShare) return false;
-  try {
-    return navigator.canShare({ files: [file] });
-  } catch {
-    return false;
-  }
-}
-
 /** Save a File the way a download link would. */
 export function saveFile(file) {
   const url = URL.createObjectURL(file);
@@ -89,25 +76,4 @@ export function saveFile(file) {
   link.click();
   link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 30_000);
-}
-
-/**
- * Share the PDF through the share sheet. Resolves to 'shared', 'cancelled'
- * (the reader closed the sheet, which is not an error) or throws.
- *
- * THE FILE ALONE, NO `title` AND NO `text`. The first build sent all three, and
- * on the pump's Android phone WhatsApp received a file called "Untitled", type
- * BIN, which would not open as a PDF: WhatsApp (and some other targets) treat a
- * share that carries text beside a file badly and drop its name and type. The
- * figure and the customer are in the PDF itself, so nothing is lost; the
- * message-only route stays on SMS.
- */
-export async function sharePdf(file) {
-  try {
-    await navigator.share({ files: [file] });
-    return 'shared';
-  } catch (error) {
-    if (error?.name === 'AbortError') return 'cancelled';
-    throw error;
-  }
 }

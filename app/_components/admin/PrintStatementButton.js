@@ -16,14 +16,7 @@ import {
 import { formatPKR } from '@/app/_lib/format-helpers';
 import { formatDate } from '@/app/_lib/date-helpers';
 import { BUSINESS_NAME } from '@/app/_lib/brand';
-import {
-  canShareFiles,
-  fetchPdf,
-  saveFile,
-  sharePdf,
-  smsLink,
-  whatsappLink,
-} from '@/app/_lib/share-pdf';
+import { fetchPdf, saveFile, smsLink, whatsappLink } from '@/app/_lib/share-pdf';
 
 /**
  * "Print statement" - the page you take when you go to collect.
@@ -175,23 +168,28 @@ export default function PrintStatementButton({
   const filename = `${kind === 'invoice' ? 'Invoice' : 'Statement'}-${customerName.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48) || 'customer'}-${kind === 'invoice' ? number : asOf}.pdf`;
 
   /*
-   * SHARE: the PDF itself, through the phone's share sheet, where WhatsApp is.
-   * A browser that cannot hand a file to another app (a laptop) downloads it
-   * and opens WhatsApp on the customer's number with the message typed in, to
-   * attach the file by hand.
+   * SEND ON WHATSAPP: download the PDF, then open WhatsApp on the customer's
+   * number with the message typed in, and the owner attaches the file there
+   * (paperclip, Document). The phone's share sheet was tried first and given up:
+   * on the pump's Android phone Chrome handed WhatsApp the PDF as an unnamed
+   * BIN file that would not open, whatever the file was called, with or without
+   * text beside it. See share-pdf.js.
+   *
+   * WhatsApp is opened by navigating to the link rather than window.open: this
+   * runs after the PDF has been fetched, no longer inside the tap, and a browser
+   * blocks a pop-up opened from there but not a navigation.
    */
   async function share() {
     setSharing({ busy: true });
     try {
       const file = await fetchPdf(href, filename);
-      if (canShareFiles(file)) {
-        await sharePdf(file);
-        setSharing(null);
-      } else {
-        saveFile(file);
-        window.open(whatsappLink(customerPhone, message), '_blank', 'noopener');
-        setSharing({ done: 'The PDF is downloaded. WhatsApp is open with the message: attach the PDF there.' });
-      }
+      saveFile(file);
+      setSharing({
+        done: 'The PDF is saved on this phone. In WhatsApp tap the paperclip, choose Document, and pick it.',
+      });
+      setTimeout(() => {
+        window.location.href = whatsappLink(customerPhone, message);
+      }, 900);
     } catch (error) {
       setSharing({ error: error.message });
     }
@@ -356,14 +354,11 @@ export default function PrintStatementButton({
             </p>
           ) : null}
 
-          {/* SEND IT, or keep it. The WhatsApp button carries the PDF itself:
-              on a phone or tablet the share sheet opens with the file attached
-              and WhatsApp on it; where a file cannot be handed over (a laptop)
-              the PDF is downloaded and WhatsApp opens on the customer's number
-              with the message typed in, to attach it there. A web page cannot
-              attach a file to WhatsApp by itself (only the WhatsApp Business
-              API can send one with no tap), so that is as far as it goes.
-              SMS sends the message alone, with the figure in it.
+          {/* SEND IT, or keep it. The WhatsApp button saves the PDF and opens
+              WhatsApp on the customer's number with the message typed in; the
+              owner attaches the file there. A web page cannot attach a file to
+              WhatsApp by itself (only the WhatsApp Business API can). SMS sends
+              the message alone, with the figure in it.
 
               TWO ROWS, compact: the first build stacked four rows and a note
               and filled a third of a phone's screen before the invoice. The
@@ -377,7 +372,7 @@ export default function PrintStatementButton({
               onClick={share}
               disabled={!statement || sharing?.busy}
             >
-              {sharing?.busy ? 'Preparing the PDF…' : 'Send PDF on WhatsApp'}
+              {sharing?.busy ? 'Preparing the PDF…' : 'Send on WhatsApp'}
             </Button>
             <div className="grid grid-cols-3 gap-2">
               <Button
