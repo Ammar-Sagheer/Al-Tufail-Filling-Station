@@ -169,6 +169,9 @@ single read.
   button, then Download, SMS and Close in equal thirds (the first build stacked
   four rows and filled a third of the screen). The message-only WhatsApp link
   was dropped: the PDF button supersedes it.
+- **The share carries the file alone.** With a `title` and `text` beside the file,
+  WhatsApp on Android received "Untitled", type BIN, which would not open. Now
+  `navigator.share({ files })` and nothing else.
 - **The nav entry and page title read Staff** (the page also holds attendance);
   the pay section inside it is still headed Salaries.
 

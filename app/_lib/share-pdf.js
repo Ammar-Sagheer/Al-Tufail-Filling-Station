@@ -86,10 +86,17 @@ export function saveFile(file) {
 /**
  * Share the PDF through the share sheet. Resolves to 'shared', 'cancelled'
  * (the reader closed the sheet, which is not an error) or throws.
+ *
+ * THE FILE ALONE, NO `title` AND NO `text`. The first build sent all three, and
+ * on the pump's Android phone WhatsApp received a file called "Untitled", type
+ * BIN, which would not open as a PDF: WhatsApp (and some other targets) treat a
+ * share that carries text beside a file badly and drop its name and type. The
+ * figure and the customer are in the PDF itself, so nothing is lost; the
+ * message-only route stays on SMS.
  */
-export async function sharePdf(file, { title, text }) {
+export async function sharePdf(file) {
   try {
-    await navigator.share({ files: [file], title, text });
+    await navigator.share({ files: [file] });
     return 'shared';
   } catch (error) {
     if (error?.name === 'AbortError') return 'cancelled';
