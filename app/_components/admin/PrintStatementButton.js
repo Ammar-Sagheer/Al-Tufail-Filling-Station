@@ -356,9 +356,14 @@ export default function PrintStatementButton({
             </p>
           ) : null}
 
-          {/* SEND IT, or keep it. Share carries the PDF itself (the phone's
-              share sheet, WhatsApp on it); the two text links send the message
-              alone, a reminder with the figure in it, to the number on file. */}
+          {/* SEND IT, or keep it. The WhatsApp button carries the PDF itself:
+              on a phone or tablet the share sheet opens with the file attached
+              and WhatsApp on it; where a file cannot be handed over (a laptop)
+              the PDF is downloaded and WhatsApp opens on the customer's number
+              with the message typed in, to attach it there. A web page cannot
+              attach a file to WhatsApp by itself (only the WhatsApp Business
+              API can send one with no tap), so that is as far as it goes. SMS
+              sends the message alone, with the figure in it. */}
           <div className="sticky bottom-0 space-y-2 border-t border-ink-200 bg-white pt-3">
             <div className="flex flex-wrap gap-2">
               <Button
@@ -368,7 +373,7 @@ export default function PrintStatementButton({
                 onClick={share}
                 disabled={!statement || sharing?.busy}
               >
-                {sharing?.busy ? 'Preparing…' : 'Share PDF'}
+                {sharing?.busy ? 'Preparing the PDF…' : 'Send PDF on WhatsApp'}
               </Button>
               <Button
                 component="a"
@@ -381,7 +386,7 @@ export default function PrintStatementButton({
               </Button>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm text-ink-600">Send the amount as a message:</span>
+              <span className="text-sm text-ink-600">Or send only the amount, as a message:</span>
               <Button
                 component="a"
                 href={whatsappLink(customerPhone, message)}
@@ -390,7 +395,7 @@ export default function PrintStatementButton({
                 variant="secondary"
                 size="small"
               >
-                WhatsApp
+                Text on WhatsApp
               </Button>
               <Button component="a" href={smsLink(customerPhone, message)} variant="secondary" size="small">
                 SMS

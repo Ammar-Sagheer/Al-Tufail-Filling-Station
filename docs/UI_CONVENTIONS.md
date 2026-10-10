@@ -3893,8 +3893,8 @@ rules a translated page keeps, found while building the frame:
 ## Sending a document, and an intro clip (October 2026)
 
 - **A document a customer receives is sent from where it is previewed.** The
-  statement dialog's foot is Share PDF (primary), Download PDF, then the two
-  message links (WhatsApp, SMS) and Close. `app/_lib/share-pdf.js` holds the
+  statement dialog's foot is Send PDF on WhatsApp (primary), Download PDF, then the
+  two message-only links (Text on WhatsApp, SMS) and Close. `app/_lib/share-pdf.js` holds the
   mechanics: fetch the PDF from its download route, `navigator.share` with the
   file where the browser can, otherwise download it and open WhatsApp with the
   message. Reuse it for any other PDF meant for someone outside the pump.

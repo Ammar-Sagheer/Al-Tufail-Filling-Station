@@ -158,6 +158,17 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## The WhatsApp button sends the PDF; Salaries is now Staff (11 Oct 2026)
+
+- **Send PDF on WhatsApp** is the primary button on the statement and invoice
+  dialog: on a phone or tablet the share sheet opens with the PDF attached and
+  WhatsApp on it; on a laptop the PDF is downloaded and WhatsApp opens on the
+  customer's number with the message typed in. A web page cannot attach a file
+  to WhatsApp with no tap (only the WhatsApp Business API can), so the reader
+  still taps WhatsApp and Send. The message-only link is now "Text on WhatsApp".
+- **The nav entry and page title read Staff** (the page also holds attendance);
+  the pay section inside it is still headed Salaries.
+
 ## Staff advances, deposit to bank and the collection panel (11 Oct 2026)
 
 Carried from the master (080 to 083), which took them from Al Hakeem's repo

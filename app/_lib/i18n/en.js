@@ -42,7 +42,7 @@ const en = {
     banking: 'Banking',
     treasury: 'Treasury',
     expenses: 'Expenses',
-    salaries: 'Salaries',
+    salaries: 'Staff',
     attendance: 'Attendance',
     assets: 'Assets',
     reports: 'Reports',

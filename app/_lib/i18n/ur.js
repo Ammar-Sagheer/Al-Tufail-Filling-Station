@@ -41,7 +41,7 @@ const ur = {
     banking: 'بینک',
     treasury: 'تجوری',
     expenses: 'اخراجات',
-    salaries: 'تنخواہیں',
+    salaries: 'عملہ',
     attendance: 'حاضری',
     assets: 'اثاثے',
     reports: 'رپورٹس',
