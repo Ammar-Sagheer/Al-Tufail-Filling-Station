@@ -174,6 +174,11 @@ single read.
   `navigator.share({ files })` and nothing else. Still BIN after that, so the File is now rebuilt from the raw bytes
   (checked for %PDF) and `canShare` is asked of that very file. If it still
   arrives as BIN the next step is a signed link instead of a file.
+- **Web Share removed (the BIN never went away).** Download always saved a good
+  PDF; only the hand-over to WhatsApp failed, on Android Chrome. **Send on
+  WhatsApp** now downloads the PDF and opens WhatsApp on the customer's number
+  with the message typed in, for the owner to attach the file. The owner chose
+  this over a private link.
 - **The statement and invoice previews are card lists on a phone** (under 48rem):
   the five-column table needed a sideways scroll that hid the fuel badge and
   the money columns. Each entry is a card (date and balance on top, detail

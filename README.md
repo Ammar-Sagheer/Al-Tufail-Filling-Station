@@ -189,11 +189,11 @@ cannot disagree. Its number is the period and the customer (`INV-202609-7F3A`),
 the same however many times it is downloaded; no counter, no table. The pump's
 logo is drawn at 64pt on it.
 
-**Sending it.** **Send PDF on WhatsApp** hands the file to the phone's share sheet, where
-WhatsApp is (Web Share with a file, which Android Chrome supports); on a laptop,
-where a file cannot be shared that way, it downloads the PDF and opens WhatsApp
-on the customer's number with the message typed in. **Text on WhatsApp** and **SMS**
-send the message alone: who it is from, what it is, the amount. The number is
+**Sending it.** **Send on WhatsApp** downloads the PDF and opens WhatsApp on the
+customer's number with the message typed in; the owner attaches the file there
+(paperclip, Document). The phone's share sheet was tried and removed: Chrome on
+Android handed WhatsApp the PDF as an unnamed BIN file that would not open.
+**SMS** sends the message alone: who it is from, what it is, the amount. The number is
 turned into WhatsApp's form (`0300-1234567` -> `923001234567`) by
 `app/_lib/share-pdf.js`.
 
