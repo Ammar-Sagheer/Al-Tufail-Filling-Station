@@ -185,8 +185,8 @@ export default function PrintStatementButton({
     try {
       const file = await fetchPdf(href, filename);
       if (canShareFiles()) {
-        const result = await sharePdf(file, { title: filename, text: message });
-        setSharing(result === 'shared' ? { done: 'Sent to the share sheet.' } : null);
+        await sharePdf(file, { title: filename, text: message });
+        setSharing(null);
       } else {
         saveFile(file);
         window.open(whatsappLink(customerPhone, message), '_blank', 'noopener');
@@ -221,8 +221,8 @@ export default function PrintStatementButton({
         subtitle={
           <span className="text-sm text-ink-600">
             {kind === 'invoice'
-              ? `${customerName}'s bill for a period: what was taken, what was owed before it and what has been paid. Check it here, then download it or send it.`
-              : `${customerName}'s account: every fill and every payment, with what is owed after each. Check it here, then download it or send it.`}
+              ? `${customerName}: what was taken in a period, what was owed before it, what has been paid.`
+              : `${customerName}: every fill and every payment, with what is owed after each.`}
           </span>
         }
       >
@@ -362,50 +362,42 @@ export default function PrintStatementButton({
               the PDF is downloaded and WhatsApp opens on the customer's number
               with the message typed in, to attach it there. A web page cannot
               attach a file to WhatsApp by itself (only the WhatsApp Business
-              API can send one with no tap), so that is as far as it goes. SMS
-              sends the message alone, with the figure in it. */}
+              API can send one with no tap), so that is as far as it goes.
+              SMS sends the message alone, with the figure in it.
+
+              TWO ROWS, compact: the first build stacked four rows and a note
+              and filled a third of a phone's screen before the invoice. The
+              one big button is the thing most often wanted; the rest share a
+              row of equal thirds. */}
           <div className="sticky bottom-0 space-y-2 border-t border-ink-200 bg-white pt-3">
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="primary"
-                type="button"
-                sx={{ flex: 1, minWidth: '10rem' }}
-                onClick={share}
-                disabled={!statement || sharing?.busy}
-              >
-                {sharing?.busy ? 'Preparing the PDF…' : 'Send PDF on WhatsApp'}
-              </Button>
+            <Button
+              variant="primary"
+              type="button"
+              sx={{ width: '100%', minHeight: 48 }}
+              onClick={share}
+              disabled={!statement || sharing?.busy}
+            >
+              {sharing?.busy ? 'Preparing the PDF…' : 'Send PDF on WhatsApp'}
+            </Button>
+            <div className="grid grid-cols-3 gap-2">
               <Button
                 component="a"
                 href={href}
                 variant="secondary"
-                sx={{ flex: 1, minWidth: '10rem' }}
+                sx={{ minHeight: 44 }}
                 onClick={() => setIsOpen(false)}
               >
-                Download PDF
+                Download
               </Button>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-sm text-ink-600">Or send only the amount, as a message:</span>
-              <Button
-                component="a"
-                href={whatsappLink(customerPhone, message)}
-                target="_blank"
-                rel="noopener"
-                variant="secondary"
-                size="small"
-              >
-                Text on WhatsApp
-              </Button>
-              <Button component="a" href={smsLink(customerPhone, message)} variant="secondary" size="small">
+              <Button component="a" href={smsLink(customerPhone, message)} variant="secondary" sx={{ minHeight: 44 }}>
                 SMS
               </Button>
-              <Button variant="secondary" size="small" type="button" onClick={() => setIsOpen(false)} sx={{ marginInlineStart: 'auto' }}>
+              <Button variant="secondary" type="button" sx={{ minHeight: 44 }} onClick={() => setIsOpen(false)}>
                 Close
               </Button>
             </div>
             {!customerPhone ? (
-              <p className="text-sm text-ink-600">No phone number is on file for {customerName}, so WhatsApp will ask who to send it to.</p>
+              <p className="text-xs text-ink-600">No number on file: WhatsApp will ask who to send it to.</p>
             ) : null}
           </div>
         </div>

@@ -165,7 +165,10 @@ single read.
   WhatsApp on it; on a laptop the PDF is downloaded and WhatsApp opens on the
   customer's number with the message typed in. A web page cannot attach a file
   to WhatsApp with no tap (only the WhatsApp Business API can), so the reader
-  still taps WhatsApp and Send. The message-only link is now "Text on WhatsApp".
+  still taps WhatsApp and Send. On a phone the footer is two rows: the one big
+  button, then Download, SMS and Close in equal thirds (the first build stacked
+  four rows and filled a third of the screen). The message-only WhatsApp link
+  was dropped: the PDF button supersedes it.
 - **The nav entry and page title read Staff** (the page also holds attendance);
   the pay section inside it is still headed Salaries.
 
