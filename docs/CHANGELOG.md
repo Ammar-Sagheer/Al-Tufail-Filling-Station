@@ -172,6 +172,11 @@ single read.
 - **The share carries the file alone.** With a `title` and `text` beside the file,
   WhatsApp on Android received "Untitled", type BIN, which would not open. Now
   `navigator.share({ files })` and nothing else.
+- **The statement and invoice previews are card lists on a phone** (under 48rem):
+  the five-column table needed a sideways scroll that hid the fuel badge and
+  the money columns. Each entry is a card (date and balance on top, detail
+  beneath, amount last) and the totals are key/value lines. The table is
+  unchanged from 48rem up.
 - **The nav entry and page title read Staff** (the page also holds attendance);
   the pay section inside it is still headed Salaries.
 

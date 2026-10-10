@@ -42,7 +42,44 @@ export default function InvoicePreview({ statement, invoice, number, customerNam
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-ink-200">
+      {/* A phone gets one small card per fill instead of a five-column table
+          that scrolled sideways (see StatementPreview): date and amount on the
+          top line, the vehicle and fuel beneath, the litres last. */}
+      <div className="overflow-hidden rounded-2xl border border-ink-200 md:hidden">
+        {invoice.lines.length === 0 ? (
+          <p className="px-4 py-3 text-ink-600">Nothing was taken on credit in this period.</p>
+        ) : (
+          <ul className="divide-y divide-ink-100">
+            {invoice.lines.map((line) => (
+              <li key={line.id} className="px-4 py-3">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-sm text-ink-600">{formatDate(line.date)}</span>
+                  <span className="tabular whitespace-nowrap text-base font-bold">{formatPKR(line.debit)}</span>
+                </div>
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  {line.fuelType ? <FuelBadge fuelType={line.fuelType} /> : <span className="font-medium">{line.detail}</span>}
+                  {line.vehicle ? (
+                    <span className="badge whitespace-nowrap bg-violet-100 font-semibold text-violet-800">
+                      {line.vehicle}
+                    </span>
+                  ) : null}
+                  {line.litres ? (
+                    <span className="tabular text-sm text-ink-600">{formatLitres(line.litres)}</span>
+                  ) : null}
+                </div>
+              </li>
+            ))}
+            <li className="flex items-baseline justify-between gap-3 bg-ink-50 px-4 py-3 font-bold">
+              <span>
+                {invoice.lines.length} {invoice.lines.length === 1 ? 'fill' : 'fills'}
+              </span>
+              <span className="tabular text-red-700">{formatPKR(invoice.taken)}</span>
+            </li>
+          </ul>
+        )}
+      </div>
+
+      <div className="hidden overflow-hidden rounded-2xl border border-ink-200 md:block">
         <div className="table-scroll mx-0 px-0">
           <table className="w-full min-w-[34rem]">
             <thead className="border-b border-ink-200 bg-ink-50">

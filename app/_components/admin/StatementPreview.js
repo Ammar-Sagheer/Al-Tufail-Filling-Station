@@ -127,7 +127,114 @@ export default function StatementPreview({ statement, customerName }) {
 
         {/* A bordered box rather than a lifted panel: it sits inside a dialog,
             which is already the surface. */}
-        <div className="overflow-hidden rounded-2xl border border-ink-200">
+        {/* ON A PHONE, A LIST OF SMALL CARDS, NOT A TABLE. Five columns need about
+            36rem; at 400px that left "Detail" cut off at the fuel badge and the
+            money columns, the figures being checked, out of sight behind a
+            sideways scroll. Each entry is a card instead: the date and the
+            balance after it on the top line, what it was beneath, and the
+            amount last, so nothing is hidden and nothing scrolls. From 48rem the
+            table below is shown, unchanged. */}
+        <div className="overflow-hidden rounded-2xl border border-ink-200 md:hidden">
+          <ul className="divide-y divide-ink-100">
+            {openingCount > 0 ? (
+              <li className="bg-ink-50 px-4 py-3">
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-sm text-ink-600">{formatDate(from)}</span>
+                  <span className="tabular whitespace-nowrap font-bold">{formatPKR(opening)}</span>
+                </div>
+                <p className="font-bold">Balance brought forward</p>
+                <p className="text-sm text-ink-600">
+                  {openingCount} earlier {openingCount === 1 ? 'entry' : 'entries'}, from{' '}
+                  {formatDate(openingFrom)}
+                </p>
+              </li>
+            ) : null}
+
+            {rows.map((row) => {
+              const struck = row.cancelled;
+              const amount = row.debit ? row.debit : row.credit ? row.credit : null;
+              const isFill = Boolean(row.debit);
+              return (
+                <li key={row.id} className={`px-4 py-3 ${struck ? 'bg-ink-50/60 text-ink-600' : ''}`}>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="text-sm text-ink-600">{formatDate(row.date)}</span>
+                    <span className="tabular whitespace-nowrap text-sm text-ink-600">
+                      Balance{' '}
+                      <span className="font-bold text-ink-900">
+                        {row.balance === null ? '' : formatPKR(row.balance)}
+                      </span>
+                    </span>
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <span className={struck ? 'font-medium line-through' : 'font-medium'}>{row.detail}</span>
+                    {row.fuelType ? <FuelBadge fuelType={row.fuelType} /> : null}
+                    {row.vehicle ? (
+                      <span className="badge whitespace-nowrap bg-violet-100 font-semibold text-violet-800">
+                        {row.vehicle}
+                      </span>
+                    ) : null}
+                    {row.cancelled ? <span className="badge bg-amber-100 text-amber-900">Cancelled</span> : null}
+                    {row.reversal ? <span className="badge bg-ink-100 text-ink-700">Correction</span> : null}
+                  </div>
+                  <div className="mt-1 flex items-baseline justify-between gap-3">
+                    <span className="tabular text-sm text-ink-600">
+                      {row.litres ? formatLitres(row.litres) : ''}
+                    </span>
+                    {amount ? (
+                      <span
+                        className={`tabular whitespace-nowrap text-base font-bold ${
+                          struck ? 'text-ink-600 line-through' : isFill ? 'text-red-700' : 'text-brand-700'
+                        }`}
+                      >
+                        {isFill ? 'Taken ' : 'Paid '}
+                        {formatPKR(amount)}
+                      </span>
+                    ) : null}
+                  </div>
+                </li>
+              );
+            })}
+
+            <li className="space-y-1 bg-ink-50 px-4 py-3">
+              <div className="flex justify-between gap-3 font-bold">
+                <span>{from || to ? 'In this period' : 'In total'}</span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-ink-600">Fuel taken</span>
+                <span className="tabular font-bold text-red-700">{formatPKR(fuelTaken)}</span>
+              </div>
+              <div className="flex justify-between gap-3">
+                <span className="text-ink-600">Paid</span>
+                <span className="tabular font-bold text-brand-700">{formatPKR(paid)}</span>
+              </div>
+              {Math.abs(corrections) >= 0.5 ? (
+                <div className="flex justify-between gap-3">
+                  <span className="text-ink-600">Corrections</span>
+                  <span className="tabular font-bold">{formatPKR(corrections)}</span>
+                </div>
+              ) : null}
+              {discrepancy ? (
+                <div className="flex justify-between gap-3">
+                  <span className="text-ink-600">Other movements</span>
+                  <span className="tabular font-bold">{formatPKR(discrepancy)}</span>
+                </div>
+              ) : null}
+            </li>
+
+            <li
+              className={`flex items-baseline justify-between gap-3 px-4 py-3 ${
+                settled ? 'bg-brand-50 text-brand-800' : 'bg-red-50 text-red-800'
+              }`}
+            >
+              <span className="font-bold">{label}</span>
+              <span className="tabular whitespace-nowrap text-lg font-bold">
+                {formatPKR(inCredit ? -totalDue : totalDue)}
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="hidden overflow-hidden rounded-2xl border border-ink-200 md:block">
           <div className="table-scroll mx-0 px-0">
             <table className="w-full min-w-[36rem]">
               <thead className="border-b border-ink-200 bg-ink-50">
