@@ -15,6 +15,7 @@
 >   named by `INTRO_VIDEO` in `pump-settings.js`, with Skip (`IntroVideo.js`).
 > - **Money received from a customer** beside the credit slips in the nozzle form, counted in the Dashboard's cash to collect (migration 900, this copy only: `ledger_entries.is_payment`, `ReceivedFromCustomerButton.js`).
 > - **Oil sale buttons on the Readings page** (Record a lubricant sale, Record a loose oil sale), the same dialogs as on Lubricants, and **Record the dip** (the Stock page's per-tank dip form in a dialog), all for the day on screen. His alone.
+> - **Test pour litres on a reading** (migration 902, this copy only): `nozzle_readings.test_litres`, fuel the meter counted that went back into the tank; `litres_sold` and `sale_amount` are net of it. A field in the reading form.
 > - The backup panel shows only when the Vercel env var `SHOW_BACKUP=true`.
 > - `supabase/setup/al-tufail-forecourt.sql`: his tanks and nozzles, run once
 >   after the new-database file (Unit 1 petrol, nozzles 1 and 2; Unit 2 diesel,

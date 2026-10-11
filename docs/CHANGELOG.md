@@ -158,6 +158,37 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## A test pour is a field on the reading, not a workaround (902, 11 Oct 2026, Al Tufail only)
+
+His register subtracts 24 L from Diesel-1 on 1 Oct ("626 - 24"): a test pour that
+went through the meter and back into the tank. The meter counts turns, so the
+closing reading stays what the machine shows, and the app had no way to say "24 L of
+that came back". The first answer was a workaround: a "Unit check" delivery of
+24 L for the stock, and a Rs 9,680.40 slip on a dummy "Test pour" customer for the
+cash. It matched the cash, and it made the Dashboard's Credit read 24,880 against
+his 15,200, which he saw at once.
+
+902 adds a nullable `nozzle_readings.test_litres` and makes the two generated
+columns net of it (`litres_sold = closing - opening - test_litres`, and
+`sale_amount` from that). Everything already reads those two, so reports, the stock
+calculation and the Dashboard needed no change, and the 24 L is never taken out of
+the tank, so no delivery is needed to put it back. `create_nozzle_reading` takes
+`p_test_litres`; the cash/credit check, the re-price of a backdated rate and the
+form all use the net litres. The reading form has a "Test pour put back in the tank"
+field and the saved reading shows it. The meter chain still reads the gross meter.
+
+The live database could not DROP anything through the connector (every `drop` timed
+out at 60 s while `create` and `alter ... set expression` ran at once), so on his
+project the two generated columns were changed with `ALTER COLUMN SET EXPRESSION` and
+`create_nozzle_reading` was added beside the old 7-argument one, which is left in place
+(the app always passes all eight). A fresh database gets the clean version from the
+file. 1 and 2 Oct were re-entered from his register with the app's own reset first:
+Cash to collect 1,741,735.66 against his 1,741,735, and 1,271,093.72 against
+1,271,092 (the register rounds each line to whole rupees).
+
+**Not in the master or the other pumps.** If another pump does test pours, the same
+file ports as its next number.
+
 ## The day's received ignores a cancelled payment (901, 11 Oct 2026)
 
 Found on Al Hakeem's books (his 810). A customer payment cancelled with "correct
