@@ -158,6 +158,22 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## Money received from a customer, in the nozzle form (11 Oct 2026, Al Tufail only)
+
+- **Money received** sits beside the credit slips in each nozzle's form (and on a
+  saved nozzle): who paid, how much, a note. It is the same entry as Record a
+  payment on the customer's page (`recordPayment`, a credit on his ledger, dated
+  the day on screen) and saves on its own, not with the reading.
+- **The Dashboard's cash to collect counts it** (migration 900). His daily sheet
+  adds "Receiving" into the total sale before taking off credit and expenses
+  (1 Oct 2026: 1,757,955 - 15,200 - 1,020 = 1,741,735); the panel had everything
+  but that. It now shows a Received figure, and to collect matches his sheet.
+- **A payment is recognised by a new flag**, `ledger_entries.is_payment`, set
+  only by the two payment forms: a credit entry is also a reversal or an owner's
+  adjustment, which are not cash. Payments before 900 are not flagged and not
+  counted.
+- Not carried to the master or the other copies, at the owner's instruction.
+
 ## The WhatsApp button sends the PDF; Salaries is now Staff (11 Oct 2026)
 
 - **Send PDF on WhatsApp** is the primary button on the statement and invoice

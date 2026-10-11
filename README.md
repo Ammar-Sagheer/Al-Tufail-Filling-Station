@@ -1044,6 +1044,7 @@ Applied in order:
 | `081_deposit_to_bank_from_the_safe.sql` | `deposit_to_bank()`: one entry takes cash out of the safe (Treasury `bank_deposit`) and into a bank account, in one transaction, linked by nullable `bank_transactions.treasury_entry_id`; deleting either half deletes the other |
 | `082_what_is_still_to_collect_from_the_staff.sql` | `get_day_collection(date)`, read-only, owner-only: what the staff still owe for a day (replaced by 083) |
 | `083_collection_counts_oil_and_shows_credit.sql` | Replaces `get_day_collection`: total sales include oil, credit is its own figure. Total sales less credit less expenses less Treasury cash-in of the day = still to collect. Read-only |
+| `900_customer_payments_in_the_days_collection.sql` | **Al Tufail only** (the 900s are this copy's own numbers). Nullable `ledger_entries.is_payment`, set by Record a payment and Money received; `get_day_collection` adds `received` (payments dated the day) into the day's cash to collect, as his sheet's "Receiving" does. No row changed |
 
 All reporting is done as Postgres aggregate RPCs rather than in the browser, so
 the numbers are fast and cannot be altered client-side.
