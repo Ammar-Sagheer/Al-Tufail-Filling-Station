@@ -158,6 +158,14 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## The day's received ignores a cancelled payment (901, 11 Oct 2026)
+
+Found on Al Hakeem's books (his 810). A customer payment cancelled with "correct
+this entry" still counted in the Dashboard's Received figure. 901 replaces
+`get_day_collection` so a payment with a correction pointing at it is left out.
+Run it on the live database; the page works without it and only differs when a
+payment has been cancelled.
+
 ## The Dashboard no longer goes stale after an expense or a safe entry (11 Oct 2026)
 
 Found on Al Hakeem's copy. `createExpense`, `recordLedgerAdjustment` and
