@@ -1,6 +1,7 @@
 import Icon from '@/app/_components/ui/Icon';
 import ReadingForm from '@/app/_components/admin/ReadingForm';
 import ClearDayButton from '@/app/_components/admin/ClearDayButton';
+import DailyDipButton from '@/app/_components/admin/DailyDipButton';
 import LubricantSaleForm from '@/app/_components/admin/LubricantSaleForm';
 import LooseOilSaleForm from '@/app/_components/admin/LooseOilSaleForm';
 import ReadingsCashUpBar from '@/app/_components/admin/ReadingsCashUpBar';
@@ -35,6 +36,10 @@ export default function ReadingsView({
   creditSalesByReading,
   ratesInForce = {},
   isOwner,
+  dipTanks = [],
+  checksByTank = {},
+  earliestByTank = {},
+  chartRanges = {},
   oilProducts = [],
   oilDrums = [],
   bankAccounts = [],
@@ -169,6 +174,14 @@ export default function ReadingsView({
               dateLabel={fmt.date(date)}
             />
           ) : null}
+          <DailyDipButton
+            tanks={dipTanks}
+            date={date}
+            checksByTank={checksByTank}
+            earliestByTank={earliestByTank}
+            chartRanges={chartRanges}
+            canManage={isOwner}
+          />
           {isOwner ? (
             <ClearDayButton date={date} dateLabel={fmt.date(date)} entryCount={done.length} />
           ) : null}

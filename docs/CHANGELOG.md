@@ -168,6 +168,11 @@ how a sale is saved; no migration. Shown to the staff login too, as on
 Lubricants. Not carried to the master or the other copies, at the owner's
 instruction.
 
+**Record the dip** joined them the same day: the Stock page's per-tank dip form
+(`StockCheckForm`, unchanged) opens in a dialog from the Readings header
+(`DailyDipButton.js`), for the day on screen, with the day's existing dips and
+the tank charts. Same action, so every dip rule is as on Stock.
+
 ## Money received from a customer, in the nozzle form (11 Oct 2026, Al Tufail only)
 
 - **Money received** sits beside the credit slips in each nozzle's form (and on a
