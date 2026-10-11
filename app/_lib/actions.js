@@ -1615,6 +1615,10 @@ export async function recordLedgerAdjustment(_prevState, formData) {
 
   revalidatePath(`/admin/customers/${customerId}`);
   revalidatePath('/admin/customers');
+  // The Dashboard's cash to collect reads these (the day's expenses, credit and
+  // what was handed in), so it must not keep showing the old figure.
+  revalidatePath('/admin');
+  revalidatePath('/admin/readings');
   return ok('Adjustment recorded.');
 }
 
@@ -2609,6 +2613,10 @@ export async function createExpense(_prevState, formData) {
   // Reports too: its Expenses total and the profit below it both move.
   revalidatePath('/admin/expenses');
   revalidatePath('/admin/reports');
+  // The Dashboard's cash to collect reads these (the day's expenses, credit and
+  // what was handed in), so it must not keep showing the old figure.
+  revalidatePath('/admin');
+  revalidatePath('/admin/readings');
   return ok(t('saidExpense.recorded'));
 }
 
@@ -3413,6 +3421,10 @@ export async function createTreasuryEntry(_prevState, formData) {
   if (error) return fail(describe(error, 'Could not record the entry.'));
 
   revalidatePath('/admin/treasury');
+  // The Dashboard's cash to collect reads these (the day's expenses, credit and
+  // what was handed in), so it must not keep showing the old figure.
+  revalidatePath('/admin');
+  revalidatePath('/admin/readings');
   return ok(
     direction === 'in'
       ? `${formatPKR(amount)} recorded into the safe.`

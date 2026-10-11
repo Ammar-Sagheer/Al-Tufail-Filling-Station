@@ -158,6 +158,14 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## The Dashboard no longer goes stale after an expense or a safe entry (11 Oct 2026)
+
+Found on Al Hakeem's copy. `createExpense`, `recordLedgerAdjustment` and
+`createTreasuryEntry` did not revalidate `/admin`, so an expense added on the
+Expenses page, a hand-entered customer debit, or cash handed in on Treasury did
+not show on the Dashboard's cash to collect until its page cache expired. They
+now revalidate `/admin` and `/admin/readings`. No migration.
+
 ## Oil sale buttons on the Readings page (11 Oct 2026, Al Tufail only)
 
 He enters the day's readings and the day's oil sales together, so the two oil
