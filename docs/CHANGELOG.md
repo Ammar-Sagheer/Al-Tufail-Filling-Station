@@ -158,6 +158,16 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## Clear this day asks for a password; a new slip lands at the top (11 Oct 2026)
+
+Carried from Al Hakeem, whose owner pressed **Clear this day** by mistake. Clearing deletes
+the day's readings and reverses its credit slips and cannot be taken back, so the dialog asks
+for the owner's own password, checked the way the full reset checks it (nothing is cleared on a
+wrong one). The password text is plain English for now, like the other owner-only additions, not
+in the dictionaries. The second change is on **Add customer** in a nozzle's form: the new slip was
+appended to the bottom of the list, below the fold of the dialog once a few were in. It now goes to
+the top, scrolled into view with its customer box focused. UI and one server action, no migration.
+
 ## His dip form opens on "At the closing" (11 Oct 2026, Al Tufail only)
 
 He runs a 24-hour shift. A sheet starts with the dip and meters at the handover and ends

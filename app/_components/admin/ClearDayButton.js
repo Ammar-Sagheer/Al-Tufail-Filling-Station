@@ -114,6 +114,22 @@ export default function ClearDayButton({ date, dateLabel, entryCount }) {
             </li>
           </ul>
 
+          {/* A day cannot be un-cleared, so the owner's own password goes first.
+              Plain English for now, like the other new owner-only text. */}
+          <div>
+            <label className="label" htmlFor="clear_day_password">
+              Your own password (a cleared day cannot be brought back)
+            </label>
+            <input
+              id="clear_day_password"
+              name="owner_password"
+              type="password"
+              required
+              autoComplete="current-password"
+              className="input"
+            />
+          </div>
+
           {/* Only a failure lands here now - a success has already closed this. */}
           <FormMessage state={result} />
 
