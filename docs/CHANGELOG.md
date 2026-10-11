@@ -158,6 +158,16 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## Oil sale buttons on the Readings page (11 Oct 2026, Al Tufail only)
+
+He enters the day's readings and the day's oil sales together, so the two oil
+dialogs (`LubricantSaleForm`, `LooseOilSaleForm`) are now also in the Readings
+page's header row, for the day on screen. Before, he had to open Lubricants and
+pick the date again. The same forms and the same actions, so nothing changes in
+how a sale is saved; no migration. Shown to the staff login too, as on
+Lubricants. Not carried to the master or the other copies, at the owner's
+instruction.
+
 ## Money received from a customer, in the nozzle form (11 Oct 2026, Al Tufail only)
 
 - **Money received** sits beside the credit slips in each nozzle's form (and on a

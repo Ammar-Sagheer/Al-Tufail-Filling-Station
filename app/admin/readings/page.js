@@ -4,6 +4,7 @@ import {
   getCustomers,
   getCreditSalesForReadings,
   getRatesInForce,
+  getLubricantStock,
   getBankAccounts,
   getExpenseCategories,
 } from '@/app/_lib/data-service';
@@ -42,12 +43,15 @@ export default async function ReadingsPage({ searchParams }) {
   // The day's expense, bank entry and deposit are entered from this page too
   // (Al Hakeem). Expenses and banking are the owner's, so a staff login neither
   // sees the bar nor has these read for it; a failure here only hides the bar.
-  const [sheet, customers, ratesInForce, bankAccounts, expenseCategories] = await Promise.all([
+  const [sheet, customers, ratesInForce, bankAccounts, expenseCategories, oilStock] = await Promise.all([
     getReadingSheet(date),
     getCustomers(),
     getRatesInForce(date),
     isOwner ? getBankAccounts().catch(() => []) : Promise.resolve([]),
     isOwner ? getExpenseCategories().catch(() => []) : Promise.resolve([]),
+    // The oil on the shelf and in the drum, for the Oil sale buttons (Al Tufail).
+    // A failure here only hides the buttons.
+    getLubricantStock(date).catch(() => []),
   ]);
 
   const savedReadingIds = sheet.filter((row) => row.reading_id).map((row) => row.reading_id);
@@ -61,6 +65,8 @@ export default async function ReadingsPage({ searchParams }) {
       creditSalesByReading={creditSalesByReading}
       ratesInForce={ratesInForce}
       isOwner={isOwner}
+      oilProducts={oilStock.filter((row) => row.is_active && !row.sold_loose)}
+      oilDrums={oilStock.filter((row) => row.is_active && row.sold_loose)}
       bankAccounts={bankAccounts}
       expenseCategories={expenseCategories}
       lang={profile.language}

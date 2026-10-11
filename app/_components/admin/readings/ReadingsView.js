@@ -1,6 +1,8 @@
 import Icon from '@/app/_components/ui/Icon';
 import ReadingForm from '@/app/_components/admin/ReadingForm';
 import ClearDayButton from '@/app/_components/admin/ClearDayButton';
+import LubricantSaleForm from '@/app/_components/admin/LubricantSaleForm';
+import LooseOilSaleForm from '@/app/_components/admin/LooseOilSaleForm';
 import ReadingsCashUpBar from '@/app/_components/admin/ReadingsCashUpBar';
 import DayHeader from '@/app/_components/admin/dashboard/DayHeader';
 import QuickEntry from '@/app/_components/admin/dashboard/QuickEntry';
@@ -33,6 +35,8 @@ export default function ReadingsView({
   creditSalesByReading,
   ratesInForce = {},
   isOwner,
+  oilProducts = [],
+  oilDrums = [],
   bankAccounts = [],
   expenseCategories = [],
   lang = 'en',
@@ -144,9 +148,31 @@ export default function ReadingsView({
           against the wrong date is the mistake it exists for, and it poisons
           every day after, because each opening comes from the day before). */}
       <DayHeader date={date} basePath="/admin/readings" title={t('readings.title')} icon="readings" lang={lang}>
-        {isOwner ? (
-          <ClearDayButton date={date} dateLabel={fmt.date(date)} entryCount={done.length} />
-        ) : null}
+        {/* OIL SALE, from the readings page (Al Tufail): the same two dialogs as on
+            Lubricants, for the day on screen, so a sale of oil is entered while
+            the day's readings are, without going to Lubricants and picking the
+            date again. */}
+        <div className="flex flex-wrap items-center gap-2">
+          {oilProducts.length > 0 ? (
+            <LubricantSaleForm
+              lubricants={oilProducts}
+              customers={customers}
+              date={date}
+              dateLabel={fmt.date(date)}
+            />
+          ) : null}
+          {oilDrums.length > 0 ? (
+            <LooseOilSaleForm
+              drums={oilDrums}
+              customers={customers}
+              date={date}
+              dateLabel={fmt.date(date)}
+            />
+          ) : null}
+          {isOwner ? (
+            <ClearDayButton date={date} dateLabel={fmt.date(date)} entryCount={done.length} />
+          ) : null}
+        </div>
       </DayHeader>
 
       {/* The day's expense, bank entry and cash to the bank, entered with the
