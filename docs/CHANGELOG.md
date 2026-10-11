@@ -158,6 +158,15 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## His dip form opens on "At the closing" (11 Oct 2026, Al Tufail only)
+
+He runs a 24-hour shift. A sheet starts with the dip and meters at the handover and ends
+with the dip and meters at the next one, and is dated the day it closes. A dip taken
+"in the morning" was therefore filed by the app under the day after his sheet. 
+`DIP_DEFAULT` is now `'evening'`, so a dip is dated the sheet it closes. His first dips
+were re-dated to match (30 Sep opening, 1 Oct, 2 Oct, all "at the closing"); no figure
+moved, because the stock arithmetic never depended on the label.
+
 ## A test pour is a field on the reading, not a workaround (902, 11 Oct 2026, Al Tufail only)
 
 His register subtracts 24 L from Diesel-1 on 1 Oct ("626 - 24"): a test pour that

@@ -11,7 +11,7 @@
  *              (Al Qaim), and so is one that dips at night (Al Hakeem).
  *   Either can still be chosen on the form; this is only where it starts.
  */
-export const DIP_DEFAULT = 'morning';
+export const DIP_DEFAULT = 'evening';
 
 /**
  * OFFER_URDU - whether the English / اردو switch is offered (079). false for a

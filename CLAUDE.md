@@ -7,7 +7,7 @@
 >
 > - `app/_lib/brand.js` (the name), `public/logo.png` and the icons made from
 >   it by `scripts/build-icons.py`.
-> - `app/_lib/pump-settings.js`: the dip form opens on **Morning, before the pumps opened**.
+> - `app/_lib/pump-settings.js`: the dip form opens on **At the closing, after the last sale** (`DIP_DEFAULT = 'evening'`, 11 Oct 2026): he runs a 24-hour shift, his sheet is dated the day it closes, and the dip taken at the handover belongs to that sheet's date. It was Morning at first.
 > - `vercel.json` runs in `bom1`.
 > - **English only**: `OFFER_URDU = false` in `pump-settings.js`, so there is no
 >   language switch and every login reads English.
