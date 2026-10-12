@@ -158,6 +158,16 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## Readings opens on the first day still to enter (12 Oct 2026)
+
+Carried from Al Hakeem. With no date in the address, Readings opens on the day after the last day
+that has readings, never past today; if that last day still has a nozzle without a reading, it opens
+on that day instead. So days typed in after the fact (a catch-up, a month entered again) open on the
+next gap rather than on today. A date asked for (arrows, date box, a link) is used as given, and
+normal daily use is unchanged (the last day is yesterday, so it opens on today). One extra read,
+`getLatestReadingDate()`; no migration. Not carried to the demo (it opens on a full sample day) or to
+Al Qaim.
+
 ## The Guide's setup steps start a pump on the 1st (12 Oct 2026)
 
 Carried from the master. The one-time setup in the in-app Guide now also covers the tank's "As of" date,
