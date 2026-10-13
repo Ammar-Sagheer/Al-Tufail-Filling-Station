@@ -158,6 +158,31 @@ single read.
    and nothing fails until the day an old backup is needed.
 
 
+## A new customer's opening balance can be dated (086, 12 Oct 2026)
+
+Found setting up Al Hakeem to start on 1 October and type the month in after the fact. The
+new-customer form's opening balance was always dated the day it was typed, so on the statement it
+sat below the October slips and the running balance on the earlier days read from zero; the only way
+round was a manual adjustment with a date. The form now has an **As of** box (default today, never
+in the future) and `create_customer_with_opening()` takes `p_opening_date` (null means today, so
+nothing changes for a normal new customer). 086 drops the six-argument function and creates the
+seven-argument one, so a call is never ambiguous. **Run 086 before this deploys:** the form sends the
+new argument. No existing row is touched. Desktop build: migration 086 and `CustomerForm.js` and the
+`createCustomer` action. The Guide's credit-customer step and `docs/CLIENT_SETUP_GUIDE.md` say to use
+the close of the day before the start.
+
+## A new supplier can start with what the pump owed them, dated (087, 13 Oct 2026)
+
+The same trap as the customer's (086), on the supplier side. Add a supplier took a name, a phone and
+a note and the account started at nothing; the opening balance was a second trip to the supplier's
+own page (an adjustment, dated by hand), and so easy to skip. The form now has **What the pump
+already owed them** and an **As of** box (default today, never in the future), and the new
+`create_supplier_with_opening()` saves the supplier and the dated opening entry in one transaction.
+With the amount left blank it is the old insert, so the form works before 087 is run; only a typed
+amount calls the function. Nothing is dropped or replaced, no row is touched. Desktop build:
+migration 087, `SupplierForm.js` and the `saveSupplier` action. The Guide and
+`docs/CLIENT_SETUP_GUIDE.md` supplier step say to type it in the form.
+
 ## Readings opens on the first day still to enter (12 Oct 2026)
 
 Carried from Al Hakeem. With no date in the address, Readings opens on the day after the last day
