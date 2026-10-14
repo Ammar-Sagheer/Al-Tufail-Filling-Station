@@ -241,6 +241,17 @@ with the dip and meters at the next one, and is dated the day it closes. A dip t
 were re-dated to match (30 Sep opening, 1 Oct, 2 Oct, all "at the closing"); no figure
 moved, because the stock arithmetic never depended on the label.
 
+## Money in / out replaces Money received in the nozzle's form (903 = the master's 089, 14 Oct 2026)
+
+Carried from the master (built for Raees Gullan). His "Money received" button is now **Money in / out**
+(`CashInOutButton.js`): the same Money received (`recordPayment`) plus **Money taken** (`recordCashGiven`, a debit
+noted "Cash given" for cash a customer or the family took out of the takings, no fuel). 903 makes the Dashboard
+count such a hand-entered debit as credit (`entered_credit`), so the staff are not asked for cash that is not in the
+drawer. The dialog still renders into `document.body`. **The button works before 903 is run**; only the Dashboard
+figure waits for it, so run 903 from the SQL Editor. It is 903 and not 089 because his own 900 and 901 rewrite
+`get_day_collection` and sort after 089, which would have undone it on a fresh database. The master's function body
+is the same as his 901.
+
 ## A test pour is a field on the reading, not a workaround (902, 11 Oct 2026, Al Tufail only)
 
 His register subtracts 24 L from Diesel-1 on 1 Oct ("626 - 24"): a test pour that

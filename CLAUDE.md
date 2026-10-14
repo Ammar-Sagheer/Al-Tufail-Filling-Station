@@ -13,7 +13,7 @@
 >   language switch and every login reads English.
 > - **An intro clip once after each sign-in**: `public/intro.mp4` (and `intro.webm`),
 >   named by `INTRO_VIDEO` in `pump-settings.js`, with Skip (`IntroVideo.js`).
-> - **Money received from a customer** beside the credit slips in the nozzle form, counted in the Dashboard's cash to collect (migration 900, this copy only: `ledger_entries.is_payment`, `ReceivedFromCustomerButton.js`).
+> - **Money in / out beside the credit slips in the nozzle form** (`CashInOutButton.js`, from the master's 089, here numbered 903; it replaced his "Money received" button, `ReceivedFromCustomerButton.js`): Money received (a customer paid: migration 900, `ledger_entries.is_payment`, counted in the Dashboard's cash to collect) and Money taken (cash a customer or the family took, no fuel: `recordCashGiven`, a "Cash given" debit counted by 903).
 > - **Oil sale buttons on the Readings page** (Record a lubricant sale, Record a loose oil sale), the same dialogs as on Lubricants, and **Record the dip** (the Stock page's per-tank dip form in a dialog), all for the day on screen. His alone.
 > - **Test pour litres on a reading** (migration 902, this copy only): `nozzle_readings.test_litres`, fuel the meter counted that went back into the tank; `litres_sold` and `sale_amount` are net of it. A field in the reading form.
 > - The backup panel shows only when the Vercel env var `SHOW_BACKUP=true`.
