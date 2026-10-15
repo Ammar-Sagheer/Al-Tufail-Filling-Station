@@ -241,6 +241,20 @@ with the dip and meters at the next one, and is dated the day it closes. A dip t
 were re-dated to match (30 Sep opening, 1 Oct, 2 Oct, all "at the closing"); no figure
 moved, because the stock arithmetic never depended on the label.
 
+## Money in / out moves from the nozzle's form to the Readings page (15 Oct 2026)
+
+He asked for the button out of the nozzles and beside the bank entry (Raees Gullan first, 15 Oct 2026). In each nozzle's
+form it was there once per nozzle, for cash that belongs to no nozzle. It is now one **Money in / out** button in the
+Readings page's **day's entries** bar, between Add expense and Bank entry (`QuickEntry` takes an optional `customers`,
+so the Dashboard's bar is unchanged), dated the day on screen like the rest of that bar. The nozzle forms no longer
+carry it. The bar is the owner's, but the two actions allow the data-entry role too, so a staff login, which has no bar,
+gets a small "Cash with a customer" panel with the button alone: nothing a staff login could do before is taken away.
+The trigger is a bar button (the same outlined button and a cash icon as its neighbours), still marked English where
+the page is Urdu, and the note's example no longer mentions a nozzle. No migration. Checked in a browser with the real
+Readings view on fixtures, in English and in Urdu, at 1366 and 400 px wide: one button on the page, in the bar beside
+Bank entry (stacked full width on a phone), none inside any of the nozzle dialogs, and the dialog's form is not inside
+another form.
+
 ## Money in / out replaces Money received in the nozzle's form (903 = the master's 089, 14 Oct 2026)
 
 Carried from the master (built for Raees Gullan). His "Money received" button is now **Money in / out**
